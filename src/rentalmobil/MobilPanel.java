@@ -7,29 +7,104 @@ import java.sql.*;
 import javax.swing.border.EmptyBorder;
 
 public class MobilPanel extends JPanel implements Refreshable {
-    JTable table = new JTable();
     DefaultTableModel model;
-    JTextField merk = new JTextField(), tipe = new JTextField(), plat = new JTextField(), tahun = new JTextField(), tarif = new JTextField(), cari = new JTextField();
-    JComboBox<String> status = new JComboBox<String>(new String[]{"Tersedia","Dipinjam","Servis"});
     int id = 0;
 
-    public MobilPanel(){
-        setLayout(new BorderLayout(0,14));
-        setBackground(UI.BG);
-        setBorder(new EmptyBorder(24,24,24,24));
-        JLabel h = new JLabel(AppSession.isAdmin() ? "Data Mobil" : "Status Mobil");
-        h.setFont(UI.TITLE);
-        add(h, BorderLayout.NORTH);
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    JTable table = new JTable();
+    JTextField merk = new JTextField(), tipe = new JTextField(), plat = new JTextField(), tahun = new JTextField(), tarif = new JTextField(), cari = new JTextField();
+    JComboBox<String> status = new JComboBox<String>(new String[]{"Tersedia","Dipinjam","Servis"});
 
-        JPanel main = UI.card();
-        add(main, BorderLayout.CENTER);
+    // GUI Builder fields
+    private JLabel lblTitle;
+    private JPanel mainPanel, formWrapPanel, formPanel, buttonPanel;
+    private JScrollPane scrollPane;
+    private JButton btnSave, btnDelete, btnReset, btnCari, btnRefresh;
+
+    private javax.swing.JLabel lblMerk, lblTipe, lblPlat, lblTahun, lblTarifHari, lblStatus, lblCari;
+    // End of variables declaration//GEN-END:variables
+    public MobilPanel(){
+        initComponents();
+        btnSave.addActionListener(e -> save());
+        btnDelete.addActionListener(e -> delete());
+        btnReset.addActionListener(e -> clear());
+        btnCari.addActionListener(e -> load(cari.getText()));
+        btnRefresh.addActionListener(e -> { cari.setText(""); load(""); });
+
+        status.setModel(new DefaultComboBoxModel<String>(new String[]{"Tersedia","Dipinjam","Servis"}));
+
+        lblTitle.setText(AppSession.isAdmin() ? "Data Mobil" : "Status Mobil");
         model = new DefaultTableModel(new Object[]{"ID","Merk","Tipe","Plat","Tahun","Tarif/Hari","Status"},0){ public boolean isCellEditable(int r,int c){ return false; } };
         table.setModel(model);
-        main.add(form(), BorderLayout.NORTH);
-        main.add(UI.table(table), BorderLayout.CENTER);
+        for(JComponent c : new JComponent[]{merk,tipe,plat,tahun,tarif,status,cari,cari}) UI.input(c);
         if (AppSession.isAdmin()) table.getSelectionModel().addListSelectionListener(e -> pilih());
+        btnSave.setVisible(AppSession.isAdmin()); btnDelete.setVisible(AppSession.isAdmin()); btnReset.setVisible(AppSession.isAdmin());
+        if (!AppSession.isAdmin()) applyPetugasStatusLayout();
     }
 
+    private void moveComponent(Component comp, int x, int y, int w, int h) {
+        remove(comp);
+        add(comp, new org.netbeans.lib.awtextra.AbsoluteConstraints(x, y, w, h));
+        comp.setBounds(x, y, w, h);
+    }
+
+    private void applyPetugasStatusLayout() {
+        for (JComponent c : new JComponent[]{lblMerk, merk, lblTipe, tipe, lblPlat, plat, lblTahun, tahun, lblTarifHari, tarif, lblStatus, status}) {
+            c.setVisible(false);
+        }
+        lblCari.setText("Cari Mobil / Plat / Status");
+        moveComponent(lblCari, 20, 64, 150, 22);
+        moveComponent(cari, 180, 60, 240, 26);
+        moveComponent(btnCari, 430, 60, 80, 28);
+        moveComponent(btnRefresh, 520, 60, 100, 28);
+        moveComponent(scrollPane, 20, 105, 960, 485);
+        revalidate();
+        repaint();
+    }
+
+    @SuppressWarnings("unchecked")
+
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        setPreferredSize(new Dimension(1000, 620));
+        setBackground(UI.BG);
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        lblTitle = new JLabel("Data Mobil");
+        add(lblTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 18, 500, 28));
+        lblMerk = new JLabel("Merk");
+        add(lblMerk, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 64, 140, 22));
+        add(merk, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 60, 180, 26));
+        lblTipe = new JLabel("Tipe");
+        add(lblTipe, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 64, 140, 22));
+        add(tipe, new org.netbeans.lib.awtextra.AbsoluteConstraints(508, 60, 180, 26));
+        lblPlat = new JLabel("Plat");
+        add(lblPlat, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 64, 100, 22));
+        add(plat, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 60, 170, 26));
+        lblTahun = new JLabel("Tahun");
+        add(lblTahun, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 104, 140, 22));
+        add(tahun, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 100, 180, 26));
+        lblTarifHari = new JLabel("Tarif/Hari");
+        add(lblTarifHari, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 104, 140, 22));
+        add(tarif, new org.netbeans.lib.awtextra.AbsoluteConstraints(508, 100, 180, 26));
+        lblStatus = new JLabel("Status");
+        add(lblStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 104, 100, 22));
+        add(status, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 100, 170, 26));
+        lblCari = new JLabel("Cari");
+        add(lblCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 144, 140, 22));
+        add(cari, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 140, 180, 26));
+        btnSave = new JButton("Simpan");
+        add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 192, 90, 28));
+        btnDelete = new JButton("Hapus");
+        add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(118, 192, 90, 28));
+        btnReset = new JButton("Reset");
+        add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(216, 192, 80, 28));
+        btnCari = new JButton("Cari");
+        add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(304, 192, 70, 28));
+        btnRefresh = new JButton("Refresh");
+        add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(382, 192, 90, 28));
+        scrollPane = new JScrollPane(table);
+        add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 960, 360));
+    }// </editor-fold>//GEN-END:initComponents
     JPanel form(){
         JPanel wrap = new JPanel(new BorderLayout(0,10));
         wrap.setOpaque(false);

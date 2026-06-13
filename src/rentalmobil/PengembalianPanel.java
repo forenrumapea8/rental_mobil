@@ -12,36 +12,106 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.border.EmptyBorder;
 
 public class PengembalianPanel extends JPanel implements Refreshable {
-    JTable table = new JTable();
     DefaultTableModel model;
+    int selectedId = 0, rentalId = 0, mobilId = 0;
+    BigDecimal totalRental = BigDecimal.ZERO, dendaPerHari = BigDecimal.ZERO, currentDenda = BigDecimal.ZERO, currentTotalAkhir = BigDecimal.ZERO, currentTagihan = BigDecimal.ZERO;
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    JTable table = new JTable();
     JComboBox<ComboItem> rental = new JComboBox<ComboItem>();
     JComboBox<String> metodeBayar = new JComboBox<String>(new String[]{"Cash", "Transfer", "QRIS"});
     DatePickerField aktual = new DatePickerField();
     JTextField telat = new JTextField(), denda = new JTextField(), total = new JTextField(), cari = new JTextField();
     JTextField tagihan = new JTextField(), jumlahBayar = new JTextField(), kembalian = new JTextField(), statusBayar = new JTextField();
-    int selectedId = 0, rentalId = 0, mobilId = 0;
-    BigDecimal totalRental = BigDecimal.ZERO, dendaPerHari = BigDecimal.ZERO, currentDenda = BigDecimal.ZERO, currentTotalAkhir = BigDecimal.ZERO, currentTagihan = BigDecimal.ZERO;
 
+    // GUI Builder fields
+    private JLabel lblTitle;
+    private JPanel mainPanel, formWrapPanel, formPanel, buttonPanel;
+    private JScrollPane scrollPane;
+    private JButton btnSave, btnStruk, btnDelete, btnReset, btnCari, btnRefresh;
+
+    private javax.swing.JLabel lblRentalBerjalan, lblTanggalAktual, lblTerlambat, lblDenda, lblTotalAkhir, lblTagihanPengembalian, lblMetodePembayaran, lblJumlahBayar, lblKembalian, lblStatusPembayaran, lblCari;
+    // End of variables declaration//GEN-END:variables
     public PengembalianPanel(){
-        setLayout(new BorderLayout(0,14));
-        setBackground(UI.BG);
-        setBorder(new EmptyBorder(24,24,24,24));
-        JLabel h = new JLabel("Transaksi Pengembalian");
-        h.setFont(UI.TITLE);
-        add(h, BorderLayout.NORTH);
+        initComponents();
+        btnSave.addActionListener(e -> save());
+        btnStruk.addActionListener(e -> printSelected());
+        btnDelete.addActionListener(e -> deletePengembalian());
+        btnReset.addActionListener(e -> clear());
+        btnCari.addActionListener(e -> loadTable(cari.getText()));
+        btnRefresh.addActionListener(e -> { cari.setText(""); refreshData(); });
 
-        JPanel main = UI.card();
-        add(main, BorderLayout.CENTER);
-        model = new DefaultTableModel(new Object[]{"ID","Rental","Pelanggan","Mobil","Aktual","Telat","Denda","Total Akhir","Tagihan","Metode","Bayar","Kembali","Status Bayar"},0){ public boolean isCellEditable(int r,int c){ return false; } };
+        metodeBayar.setModel(new DefaultComboBoxModel<String>(new String[]{"Cash", "Transfer", "QRIS"}));
+
+        model = new DefaultTableModel(new Object[]{"ID","ID Rental","Pelanggan","Mobil","Tgl Aktual","Telat","Denda","Total Akhir","Tagihan","Metode","Bayar","Kembali","Status Bayar"},0){ public boolean isCellEditable(int r,int c){ return false; } };
         table.setModel(model);
-        main.add(form(), BorderLayout.NORTH);
-        main.add(UI.table(table), BorderLayout.CENTER);
-        rental.addActionListener(e -> ambilRental());
+        for(JComponent c : new JComponent[]{rental,telat,denda,total,cari,tagihan,metodeBayar,jumlahBayar,kembalian,statusBayar}) UI.input(c);
+        telat.setEditable(false); denda.setEditable(false); total.setEditable(false); tagihan.setEditable(false); kembalian.setEditable(false); statusBayar.setEditable(false);
+        rental.addActionListener(e -> hitung());
         aktual.addChange(() -> hitung());
         jumlahBayar.getDocument().addDocumentListener(new SimpleDocListener(){ public void update(){ hitungPembayaran(); } });
         metodeBayar.addActionListener(e -> hitungPembayaran());
+        table.getSelectionModel().addListSelectionListener(e -> { if(table.getSelectedRow()>=0){ int r=table.convertRowIndexToModel(table.getSelectedRow()); selectedId=Integer.parseInt(model.getValueAt(r,0).toString()); } });
+        btnDelete.setVisible(AppSession.isAdmin());
     }
 
+    @SuppressWarnings("unchecked")
+
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        setPreferredSize(new Dimension(1000, 620));
+        setBackground(UI.BG);
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        lblTitle = new JLabel("Pengembalian Mobil");
+        add(lblTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 18, 500, 28));
+        lblRentalBerjalan = new JLabel("Rental Berjalan");
+        add(lblRentalBerjalan, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 64, 140, 22));
+        add(rental, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 60, 180, 26));
+        lblTanggalAktual = new JLabel("Tanggal Aktual");
+        add(lblTanggalAktual, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 64, 140, 22));
+        add(aktual, new org.netbeans.lib.awtextra.AbsoluteConstraints(508, 60, 180, 26));
+        lblTerlambat = new JLabel("Terlambat");
+        add(lblTerlambat, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 64, 100, 22));
+        add(telat, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 60, 170, 26));
+        lblDenda = new JLabel("Denda");
+        add(lblDenda, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 104, 140, 22));
+        add(denda, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 100, 180, 26));
+        lblTotalAkhir = new JLabel("Total Akhir");
+        add(lblTotalAkhir, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 104, 140, 22));
+        add(total, new org.netbeans.lib.awtextra.AbsoluteConstraints(508, 100, 180, 26));
+        lblTagihanPengembalian = new JLabel("Tagihan");
+        add(lblTagihanPengembalian, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 104, 100, 22));
+        add(tagihan, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 100, 170, 26));
+        lblMetodePembayaran = new JLabel("Metode Pembayaran");
+        add(lblMetodePembayaran, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 144, 140, 22));
+        add(metodeBayar, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 140, 180, 26));
+        lblJumlahBayar = new JLabel("Jumlah Bayar");
+        add(lblJumlahBayar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 144, 140, 22));
+        add(jumlahBayar, new org.netbeans.lib.awtextra.AbsoluteConstraints(508, 140, 180, 26));
+        lblKembalian = new JLabel("Kembalian");
+        add(lblKembalian, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 144, 100, 22));
+        add(kembalian, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 140, 170, 26));
+        lblStatusPembayaran = new JLabel("Status Pembayaran");
+        add(lblStatusPembayaran, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 184, 140, 22));
+        add(statusBayar, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 180, 180, 26));
+        lblCari = new JLabel("Cari");
+        add(lblCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 184, 140, 22));
+        add(cari, new org.netbeans.lib.awtextra.AbsoluteConstraints(508, 180, 180, 26));
+        btnSave = new JButton("Simpan Pengembalian");
+        add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 232, 160, 28));
+        btnStruk = new JButton("Cetak Struk");
+        add(btnStruk, new org.netbeans.lib.awtextra.AbsoluteConstraints(188, 232, 110, 28));
+        btnDelete = new JButton("Hapus");
+        add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(306, 232, 90, 28));
+        btnReset = new JButton("Reset");
+        add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(404, 232, 80, 28));
+        btnCari = new JButton("Cari");
+        add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 232, 70, 28));
+        btnRefresh = new JButton("Refresh");
+        add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 232, 90, 28));
+        scrollPane = new JScrollPane(table);
+        add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 960, 320));
+    }// </editor-fold>//GEN-END:initComponents
     JPanel form(){
         JPanel wrap = new JPanel(new BorderLayout(0,10));
         wrap.setOpaque(false);

@@ -7,29 +7,68 @@ import java.sql.*;
 import javax.swing.border.EmptyBorder;
 
 public class DendaPanel extends JPanel implements Refreshable {
-    JTable table = new JTable();
     DefaultTableModel model;
-    JTextField nama = new JTextField("Denda Keterlambatan"), nominal = new JTextField(), ket = new JTextField();
-    JComboBox<String> status = new JComboBox<String>(new String[]{"Aktif","Nonaktif"});
     int id = 0;
 
-    public DendaPanel(){
-        setLayout(new BorderLayout(0,14));
-        setBackground(UI.BG);
-        setBorder(new EmptyBorder(24,24,24,24));
-        JLabel h = new JLabel("Pengaturan Denda Keterlambatan");
-        h.setFont(UI.TITLE);
-        add(h, BorderLayout.NORTH);
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    JTable table = new JTable();
+    JTextField nama = new JTextField("Denda Keterlambatan"), nominal = new JTextField(), ket = new JTextField();
+    JComboBox<String> status = new JComboBox<String>(new String[]{"Aktif","Nonaktif"});
 
-        JPanel main = UI.card();
-        add(main, BorderLayout.CENTER);
+    // GUI Builder fields
+    private JLabel lblTitle;
+    private JPanel mainPanel, formWrapPanel, formPanel, buttonPanel;
+    private JScrollPane scrollPane;
+    private JButton btnSave, btnDelete, btnReset;
+
+    private javax.swing.JLabel lblNama, lblNominalHari, lblStatus, lblKeterangan;
+    // End of variables declaration//GEN-END:variables
+    public DendaPanel(){
+        initComponents();
+        btnSave.addActionListener(e -> save());
+        btnDelete.addActionListener(e -> delete());
+        btnReset.addActionListener(e -> clear());
+
+        status.setModel(new DefaultComboBoxModel<String>(new String[]{"Aktif","Nonaktif"}));
+        nama.setText("Denda Keterlambatan");
+
+        lblTitle.setText("Pengaturan Denda Keterlambatan");
         model = new DefaultTableModel(new Object[]{"ID","Nama Denda","Nominal/Hari","Status","Keterangan"},0){ public boolean isCellEditable(int r,int c){ return false; } };
         table.setModel(model);
-        main.add(form(), BorderLayout.NORTH);
-        main.add(UI.table(table), BorderLayout.CENTER);
+        for(JComponent c : new JComponent[]{nama,nominal,ket,status}) UI.input(c);
         table.getSelectionModel().addListSelectionListener(e -> pilih());
     }
 
+    @SuppressWarnings("unchecked")
+
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        setPreferredSize(new Dimension(1000, 620));
+        setBackground(UI.BG);
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        lblTitle = new JLabel("Pengaturan Denda");
+        add(lblTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 18, 500, 28));
+        lblNama = new JLabel("Nama");
+        add(lblNama, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 64, 140, 22));
+        add(nama, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 60, 180, 26));
+        lblNominalHari = new JLabel("Nominal/Hari");
+        add(lblNominalHari, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 64, 140, 22));
+        add(nominal, new org.netbeans.lib.awtextra.AbsoluteConstraints(508, 60, 180, 26));
+        lblStatus = new JLabel("Status");
+        add(lblStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 64, 100, 22));
+        add(status, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 60, 170, 26));
+        lblKeterangan = new JLabel("Keterangan");
+        add(lblKeterangan, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 104, 140, 22));
+        add(ket, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 100, 180, 26));
+        btnSave = new JButton("Simpan");
+        add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 152, 90, 28));
+        btnDelete = new JButton("Hapus");
+        add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(118, 152, 90, 28));
+        btnReset = new JButton("Reset");
+        add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(216, 152, 80, 28));
+        scrollPane = new JScrollPane(table);
+        add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 960, 400));
+    }// </editor-fold>//GEN-END:initComponents
     JPanel form(){
         JPanel wrap = new JPanel(new BorderLayout(0,10));
         wrap.setOpaque(false);

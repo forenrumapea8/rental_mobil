@@ -1,8 +1,47 @@
 package rentalmobil;
-import javax.swing.*; import java.awt.*; import java.sql.*; import javax.swing.border.EmptyBorder;
+
+import javax.swing.*;
+import java.awt.*;
+import java.sql.*;
+import javax.swing.border.EmptyBorder;
+
 public class PengaturanAkunPanel extends JPanel implements Refreshable {
-    JTextField nama=new JTextField(), username=new JTextField(); JPasswordField password=new JPasswordField();
-    public PengaturanAkunPanel(){ setLayout(new BorderLayout(0,14)); setBackground(UI.BG); setBorder(new EmptyBorder(24,24,24,24)); JLabel h=new JLabel("Pengaturan Akun");h.setFont(UI.TITLE);add(h,BorderLayout.NORTH); JPanel card=UI.card();add(card,BorderLayout.CENTER); UI.input(nama);UI.input(username);UI.input(password); JPanel g=new JPanel(new GridBagLayout());g.setOpaque(false); g.add(UI.label("Nama"),UI.gbc(0,0));g.add(nama,UI.gbc(1,0));g.add(UI.label("Username"),UI.gbc(0,1));g.add(username,UI.gbc(1,1));g.add(UI.label("Password Baru"),UI.gbc(0,2));g.add(password,UI.gbc(1,2));g.add(UI.muted("Kosongkan password jika tidak ingin mengubah."),UI.gbc(1,3)); card.add(g,BorderLayout.NORTH); JButton sim=UI.button("Simpan Akun"); sim.addActionListener(e->save()); JPanel b=new JPanel(new FlowLayout(FlowLayout.LEFT));b.setOpaque(false);b.add(sim); card.add(b,BorderLayout.CENTER); }
-    void save(){String table=AppSession.isAdmin()?"admin":"petugas";String idcol=AppSession.isAdmin()?"id_admin":"id_petugas";String pass=new String(password.getPassword()); try(Connection c=DB.getConnection()){ PreparedStatement ps; if(pass.trim().isEmpty()){ps=c.prepareStatement("UPDATE "+table+" SET nama=?,username=? WHERE "+idcol+"=?");ps.setString(1,nama.getText());ps.setString(2,username.getText());ps.setInt(3,AppSession.userId);} else {ps=c.prepareStatement("UPDATE "+table+" SET nama=?,username=?,password=? WHERE "+idcol+"=?");ps.setString(1,nama.getText());ps.setString(2,username.getText());ps.setString(3,pass);ps.setInt(4,AppSession.userId);} ps.executeUpdate();AppSession.nama=nama.getText();AppSession.username=username.getText();password.setText("");UI.info(this,"Akun berhasil diperbarui.");}catch(Exception e){UI.error(this,e);} }
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    JTextField nama = new JTextField(), username = new JTextField();
+    JPasswordField password = new JPasswordField();
+    private JLabel lblTitle;
+    private JPanel mainPanel, formWrapPanel, formPanel, buttonPanel;
+    private JButton btnSave;
+
+    private javax.swing.JLabel lblNama, lblUsername, lblPasswordBaru, lblEmpty, lblNote;
+    // End of variables declaration//GEN-END:variables
+    public PengaturanAkunPanel(){ initComponents();
+        btnSave.addActionListener(e -> save());
+ UI.input(nama); UI.input(username); UI.input(password); }
+
+    @SuppressWarnings("unchecked")
+
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        setPreferredSize(new Dimension(1000, 620));
+        setBackground(UI.BG);
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        lblTitle = new JLabel("Pengaturan Akun");
+        add(lblTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 18, 500, 28));
+        lblNama = new JLabel("Nama");
+        add(lblNama, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 68, 130, 22));
+        add(nama, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 64, 420, 26));
+        lblUsername = new JLabel("Username");
+        add(lblUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 108, 130, 22));
+        add(username, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 104, 420, 26));
+        lblPasswordBaru = new JLabel("Password Baru");
+        add(lblPasswordBaru, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 148, 130, 22));
+        add(password, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 144, 420, 26));
+        lblNote = new JLabel("Kosongkan password jika tidak ingin mengubah.");
+        add(lblNote, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 182, 420, 22));
+        btnSave = new JButton("Simpan Akun");
+        add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, 130, 28));
+    }// </editor-fold>//GEN-END:initComponents
+    void save(){ String table=AppSession.isAdmin()?"admin":"petugas"; String idcol=AppSession.isAdmin()?"id_admin":"id_petugas"; String pass=new String(password.getPassword()); try(Connection c=DB.getConnection()){ PreparedStatement ps; if(pass.trim().isEmpty()){ ps=c.prepareStatement("UPDATE "+table+" SET nama=?,username=? WHERE "+idcol+"=?"); ps.setString(1,nama.getText()); ps.setString(2,username.getText()); ps.setInt(3,AppSession.userId); } else { ps=c.prepareStatement("UPDATE "+table+" SET nama=?,username=?,password=? WHERE "+idcol+"=?"); ps.setString(1,nama.getText()); ps.setString(2,username.getText()); ps.setString(3,pass); ps.setInt(4,AppSession.userId); } ps.executeUpdate(); AppSession.nama=nama.getText(); AppSession.username=username.getText(); password.setText(""); UI.info(this,"Akun berhasil diperbarui."); } catch(Exception e){ UI.error(this,e); } }
     public void refreshData(){ nama.setText(AppSession.nama); username.setText(AppSession.username); password.setText(""); }
 }

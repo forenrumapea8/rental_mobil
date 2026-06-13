@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout"/>
+  <SubComponents>
+<Component class="javax.swing.JLabel" name="lblTitle">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Backup &amp; Restore Database"/>
+      </Properties>
+  <Constraints>
+    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+      <AbsoluteConstraints x="20" y="18" width="500" height="28"/>
+    </Constraint>
+  </Constraints>
+</Component>
+<Container class="javax.swing.JPanel" name="topPanel">
+  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout"/>
+  <SubComponents>
+<Component class="javax.swing.JTextArea" name="noteArea">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Gunakan Backup untuk menyimpan struktur dan data database ke file .sql. Gunakan Restore hanya untuk file backup sistem ini karena proses restore akan menimpa database rental_mobil."/>
+      </Properties>
+  <Constraints>
+    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+      <AbsoluteConstraints x="0" y="0" width="980" height="55"/>
+    </Constraint>
+  </Constraints>
+</Component><Component class="javax.swing.JButton" name="btnBackup">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ed" green="3a" red="7c" type="rgb"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
+        <Property name="contentAreaFilled" type="boolean" value="false"/>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="opaque" type="boolean" value="true"/>
+        <Property name="text" type="java.lang.String" value="Backup Database"/>
+      </Properties>
+  <Constraints>
+    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+      <AbsoluteConstraints x="0" y="70" width="150" height="28"/>
+    </Constraint>
+  </Constraints>
+</Component><Component class="javax.swing.JButton" name="btnRestore">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ed" green="3a" red="7c" type="rgb"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
+        <Property name="contentAreaFilled" type="boolean" value="false"/>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="opaque" type="boolean" value="true"/>
+        <Property name="text" type="java.lang.String" value="Restore Database"/>
+      </Properties>
+  <Constraints>
+    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+      <AbsoluteConstraints x="160" y="70" width="150" height="28"/>
+    </Constraint>
+  </Constraints>
+</Component>
+  </SubComponents>
+  <Constraints>
+    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+      <AbsoluteConstraints x="20" y="60" width="960" height="120"/>
+    </Constraint>
+  </Constraints>
+</Container>
+<Container class="javax.swing.JScrollPane" name="scrollPane">
+  <AuxValues><AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/></AuxValues>
+  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+  <SubComponents>
+<Component class="javax.swing.JTextArea" name="log">
+  <Properties><Property name="text" type="java.lang.String" value="Log backup/restore akan tampil di sini.&#xa;"/></Properties>
+</Component>
+  </SubComponents>
+  <Constraints><Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription"><AbsoluteConstraints x="20" y="190" width="960" height="400"/></Constraint></Constraints>
+</Container>
+  </SubComponents>
+</Form>

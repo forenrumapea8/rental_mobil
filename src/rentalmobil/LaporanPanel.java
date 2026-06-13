@@ -8,33 +8,57 @@ import java.io.*;
 import javax.swing.border.EmptyBorder;
 
 public class LaporanPanel extends JPanel implements Refreshable {
-    JTable table = new JTable();
     DefaultTableModel model;
-    JComboBox<String> jenis;
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    JTable table = new JTable();
+    JComboBox<String> jenis = new JComboBox<String>();
     JTextField cari = new JTextField();
 
+    // GUI Builder fields
+    private JLabel lblTitle;
+    private JPanel mainPanel, filterPanel;
+    private JScrollPane scrollPane;
+    private JButton btnTampil, btnCetak;
+
+    private javax.swing.JLabel lblJenis, lblCari;
+    // End of variables declaration//GEN-END:variables
     public LaporanPanel(){
-        setLayout(new BorderLayout(0,14));
-        setBackground(UI.BG);
-        setBorder(new EmptyBorder(24,24,24,24));
-        JLabel h = new JLabel(AppSession.isAdmin() ? "Laporan Rental & Pendapatan" : "Riwayat Transaksi");
-        h.setFont(UI.TITLE);
-        add(h, BorderLayout.NORTH);
+        initComponents();
+        btnTampil.addActionListener(e -> load());
+        btnCetak.addActionListener(e -> print());
 
-        if(AppSession.isAdmin()){
-            jenis = new JComboBox<String>(new String[]{"Laporan Rental","Laporan Pengembalian","Status Mobil","Laporan Pendapatan"});
-        } else {
-            jenis = new JComboBox<String>(new String[]{"Riwayat Rental","Riwayat Pengembalian","Status Mobil"});
-        }
-
-        JPanel main = UI.card();
-        add(main, BorderLayout.CENTER);
+        lblTitle.setText(AppSession.isAdmin() ? "Laporan Rental & Pendapatan" : "Riwayat Transaksi");
+        btnCetak.setText(AppSession.isAdmin() ? "Cetak Laporan" : "Cetak Riwayat");
+        if(AppSession.isAdmin()) jenis.setModel(new DefaultComboBoxModel<String>(new String[]{"Laporan Rental","Laporan Pengembalian","Status Mobil","Laporan Pendapatan"}));
+        else jenis.setModel(new DefaultComboBoxModel<String>(new String[]{"Riwayat Rental","Riwayat Pengembalian","Status Mobil"}));
         model = new DefaultTableModel();
         table.setModel(model);
-        main.add(filter(), BorderLayout.NORTH);
-        main.add(UI.table(table), BorderLayout.CENTER);
+        UI.input(jenis); UI.input(cari);
     }
 
+    @SuppressWarnings("unchecked")
+
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        setPreferredSize(new Dimension(1000, 620));
+        setBackground(UI.BG);
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        lblTitle = new JLabel("Laporan Rental");
+        add(lblTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 18, 500, 28));
+        lblJenis = new JLabel("Jenis");
+        add(lblJenis, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 64, 80, 22));
+        add(jenis, new org.netbeans.lib.awtextra.AbsoluteConstraints(108, 60, 200, 26));
+        lblCari = new JLabel("Cari");
+        add(lblCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 64, 80, 22));
+        add(cari, new org.netbeans.lib.awtextra.AbsoluteConstraints(428, 60, 220, 26));
+        btnTampil = new JButton("Tampilkan");
+        add(btnTampil, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 105, 100, 28));
+        btnCetak = new JButton("Cetak Laporan");
+        add(btnCetak, new org.netbeans.lib.awtextra.AbsoluteConstraints(128, 105, 130, 28));
+        scrollPane = new JScrollPane(table);
+        add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 960, 440));
+    }// </editor-fold>//GEN-END:initComponents
     JPanel filter(){
         JPanel p = UI.leftFlow();
         UI.input(jenis); UI.input(cari);

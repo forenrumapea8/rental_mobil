@@ -1,0 +1,40 @@
+------------------------------------------------
+                RENTAL MOBIL RM
+         Sistem Manajemen Rental Mobil
+               Kediri, Jawa Timur
+            Telp/WA: 08xx-xxxx-xxxx
+------------------------------------------------
+               STRUK RENTAL MOBIL
+No. Transaksi     : RNT-000001
+Dicetak           : 13-06-2026 16:37:56
+Kasir             : Administrator (Admin)
+------------------------------------------------
+
+DATA PELANGGAN
+------------------------------------------------
+Nama              : Ahmad Fauzi
+No. HP            : 083333333333
+Alamat            : Blitar
+
+DETAIL RENTAL
+------------------------------------------------
+Mobil             : Daihatsu Xenia - AG 9012 CC
+Tanggal Pinjam    : 2026-06-13
+Tanggal Kembali   : 2026-06-15
+Lama Sewa         : 2 hari
+Tarif/Hari        : Rp350.000
+Total Tagihan     : Rp700.000
+
+PEMBAYARAN
+------------------------------------------------
+Metode            : Cash
+Jumlah Bayar      : Rp900.000
+Kembalian         : Rp200.000
+Status Bayar      : Lunas
+Status Rental     : Berjalan
+------------------------------------------------
+Catatan: Struk ini sah sebagai bukti transaksi.
+
+       Terima kasih atas kepercayaan Anda
+               Hati-hati di jalan
+------------------------------------------------

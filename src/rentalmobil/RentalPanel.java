@@ -8,42 +8,118 @@ import java.awt.*;
 import java.sql.*;
 import java.math.BigDecimal;
 import java.io.*;
-import java.util.concurrent.TimeUnit;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import javax.swing.border.EmptyBorder;
 
 public class RentalPanel extends JPanel implements Refreshable {
-    JTable table = new JTable();
     DefaultTableModel model;
+    int selectedId = 0;
+    BigDecimal currentTarif = BigDecimal.ZERO;
+    BigDecimal currentTotal = BigDecimal.ZERO;
+    boolean adjustingDates = false;
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    JTable table = new JTable();
     JComboBox<ComboItem> pelanggan = new JComboBox<ComboItem>(), mobil = new JComboBox<ComboItem>();
     JComboBox<String> metodeBayar = new JComboBox<String>(new String[]{"Cash", "Transfer", "QRIS"});
     DatePickerField tglPinjam = new DatePickerField(), tglKembali = new DatePickerField();
     JTextField lama = new JTextField(), tarif = new JTextField(), total = new JTextField(), cari = new JTextField();
     JTextField jumlahBayar = new JTextField(), kembalian = new JTextField(), statusBayar = new JTextField();
-    int selectedId = 0;
-    BigDecimal currentTarif = BigDecimal.ZERO;
-    BigDecimal currentTotal = BigDecimal.ZERO;
 
+    // GUI Builder fields
+    private JLabel lblTitle;
+    private JPanel mainPanel, formWrapPanel, formPanel, buttonPanel;
+    private JScrollPane scrollPane;
+    private JButton btnSave, btnStruk, btnBatal, btnReset, btnCari, btnRefresh;
+
+    private javax.swing.JLabel lblPelanggan, lblMobilTersedia, lblTglPinjam, lblTglKembali, lblLamaSewa, lblTarifHari, lblTotalTagihan, lblMetodePembayaran, lblJumlahBayar, lblKembalian, lblStatusPembayaran, lblCari;
+    // End of variables declaration//GEN-END:variables
     public RentalPanel(){
-        setLayout(new BorderLayout(0,14));
-        setBackground(UI.BG);
-        setBorder(new EmptyBorder(24,24,24,24));
-        JLabel h = new JLabel("Transaksi Rental / Peminjaman");
-        h.setFont(UI.TITLE);
-        add(h, BorderLayout.NORTH);
+        initComponents();
+        btnSave.addActionListener(e -> save());
+        btnStruk.addActionListener(e -> printSelected());
+        btnBatal.addActionListener(e -> cancelRental());
+        btnReset.addActionListener(e -> clear());
+        btnCari.addActionListener(e -> loadTable(cari.getText()));
+        btnRefresh.addActionListener(e -> { cari.setText(""); refreshData(); });
 
-        JPanel main = UI.card();
-        add(main, BorderLayout.CENTER);
+        metodeBayar.setModel(new DefaultComboBoxModel<String>(new String[]{"Cash", "Transfer", "QRIS"}));
+
         model = new DefaultTableModel(new Object[]{"ID","Pelanggan","Mobil","Tgl Pinjam","Tgl Kembali","Lama","Total","Metode","Bayar","Kembali","Status Bayar","Status"},0){ public boolean isCellEditable(int r,int c){ return false; } };
         table.setModel(model);
-        main.add(form(), BorderLayout.NORTH);
-        main.add(UI.table(table), BorderLayout.CENTER);
+        for(JComponent c : new JComponent[]{pelanggan,mobil,lama,tarif,total,cari,metodeBayar,jumlahBayar,kembalian,statusBayar}) UI.input(c);
+        lama.setEditable(false); tarif.setEditable(false); total.setEditable(false); kembalian.setEditable(false); statusBayar.setEditable(false);
         mobil.addActionListener(e -> loadTarif());
-        tglPinjam.addChange(() -> hitung());
+        tglPinjam.addChange(() -> onTanggalPinjamChanged());
         tglKembali.addChange(() -> hitung());
         jumlahBayar.getDocument().addDocumentListener(new SimpleDocListener(){ public void update(){ hitungPembayaran(); } });
         metodeBayar.addActionListener(e -> hitungPembayaran());
+        table.getSelectionModel().addListSelectionListener(e -> { if(table.getSelectedRow() >= 0){ int r = table.convertRowIndexToModel(table.getSelectedRow()); selectedId = Integer.parseInt(model.getValueAt(r,0).toString()); } });
+        btnBatal.setVisible(AppSession.isAdmin());
+        hitung();
     }
 
+    @SuppressWarnings("unchecked")
+
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        setPreferredSize(new Dimension(1000, 620));
+        setBackground(UI.BG);
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        lblTitle = new JLabel("Transaksi Rental / Peminjaman");
+        add(lblTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 18, 500, 28));
+        lblPelanggan = new JLabel("Pelanggan");
+        add(lblPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 64, 140, 22));
+        add(pelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 60, 180, 26));
+        lblMobilTersedia = new JLabel("Mobil Tersedia");
+        add(lblMobilTersedia, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 64, 140, 22));
+        add(mobil, new org.netbeans.lib.awtextra.AbsoluteConstraints(508, 60, 180, 26));
+        lblTglPinjam = new JLabel("Tgl Pinjam");
+        add(lblTglPinjam, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 64, 100, 22));
+        add(tglPinjam, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 60, 170, 26));
+        lblTglKembali = new JLabel("Tgl Kembali");
+        add(lblTglKembali, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 104, 140, 22));
+        add(tglKembali, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 100, 180, 26));
+        lblLamaSewa = new JLabel("Lama Sewa");
+        add(lblLamaSewa, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 104, 140, 22));
+        add(lama, new org.netbeans.lib.awtextra.AbsoluteConstraints(508, 100, 180, 26));
+        lblTarifHari = new JLabel("Tarif/Hari");
+        add(lblTarifHari, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 104, 100, 22));
+        add(tarif, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 100, 170, 26));
+        lblTotalTagihan = new JLabel("Total Tagihan");
+        add(lblTotalTagihan, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 144, 140, 22));
+        add(total, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 140, 180, 26));
+        lblMetodePembayaran = new JLabel("Metode Pembayaran");
+        add(lblMetodePembayaran, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 144, 140, 22));
+        add(metodeBayar, new org.netbeans.lib.awtextra.AbsoluteConstraints(508, 140, 180, 26));
+        lblJumlahBayar = new JLabel("Jumlah Bayar");
+        add(lblJumlahBayar, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 144, 100, 22));
+        add(jumlahBayar, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 140, 170, 26));
+        lblKembalian = new JLabel("Kembalian");
+        add(lblKembalian, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 184, 140, 22));
+        add(kembalian, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 180, 180, 26));
+        lblStatusPembayaran = new JLabel("Status Pembayaran");
+        add(lblStatusPembayaran, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 184, 140, 22));
+        add(statusBayar, new org.netbeans.lib.awtextra.AbsoluteConstraints(508, 180, 180, 26));
+        lblCari = new JLabel("Cari");
+        add(lblCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 184, 100, 22));
+        add(cari, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 180, 170, 26));
+        btnSave = new JButton("Simpan Rental");
+        add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 232, 120, 28));
+        btnStruk = new JButton("Cetak Struk Rental");
+        add(btnStruk, new org.netbeans.lib.awtextra.AbsoluteConstraints(148, 232, 150, 28));
+        btnBatal = new JButton("Batalkan Rental");
+        add(btnBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(306, 232, 130, 28));
+        btnReset = new JButton("Reset");
+        add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(444, 232, 80, 28));
+        btnCari = new JButton("Cari");
+        add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(532, 232, 70, 28));
+        btnRefresh = new JButton("Refresh");
+        add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 232, 90, 28));
+        scrollPane = new JScrollPane(table);
+        add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 960, 320));
+    }// </editor-fold>//GEN-END:initComponents
     JPanel form(){
         JPanel wrap = new JPanel(new BorderLayout(0,10));
         wrap.setOpaque(false);
@@ -118,16 +194,38 @@ public class RentalPanel extends JPanel implements Refreshable {
         hitung();
     }
 
+    void onTanggalPinjamChanged(){
+        if(adjustingDates){ hitung(); return; }
+        try{
+            LocalDate pinjam = tglPinjam.getSqlDate().toLocalDate();
+            LocalDate kembali = tglKembali.getSqlDate().toLocalDate();
+            if(kembali.isBefore(pinjam)){
+                adjustingDates = true;
+                tglKembali.setDate(pinjam.plusDays(1));
+                adjustingDates = false;
+            }
+        }catch(Exception ignored){}
+        hitung();
+    }
+
     void hitung(){
         try{
-            long diff = tglKembali.getSqlDate().getTime() - tglPinjam.getSqlDate().getTime();
-            int days = (int)TimeUnit.MILLISECONDS.toDays(diff);
+            LocalDate pinjam = tglPinjam.getSqlDate().toLocalDate();
+            LocalDate kembali = tglKembali.getSqlDate().toLocalDate();
+            long selisihHari = ChronoUnit.DAYS.between(pinjam, kembali);
+            int days = (int) selisihHari;
             if(days < 1) days = 1;
+
             lama.setText(String.valueOf(days));
             currentTotal = currentTarif.multiply(new BigDecimal(days));
             total.setText(DB.rupiah(currentTotal));
             hitungPembayaran();
-        }catch(Exception e){ }
+        }catch(Exception e){
+            lama.setText("1");
+            currentTotal = currentTarif;
+            total.setText(DB.rupiah(currentTotal));
+            hitungPembayaran();
+        }
     }
 
     void hitungPembayaran(){
@@ -158,6 +256,12 @@ public class RentalPanel extends JPanel implements Refreshable {
         ComboItem p = (ComboItem)pelanggan.getSelectedItem();
         ComboItem m = (ComboItem)mobil.getSelectedItem();
         if(p == null || m == null){ UI.warn(this,"Data pelanggan dan mobil tersedia wajib ada."); return; }
+        LocalDate pinjamDate = tglPinjam.getSqlDate().toLocalDate();
+        LocalDate kembaliDate = tglKembali.getSqlDate().toLocalDate();
+        if(kembaliDate.isBefore(pinjamDate)){
+            UI.warn(this,"Tanggal kembali tidak boleh lebih awal dari tanggal pinjam.");
+            return;
+        }
         Connection c = null;
         try{
             c = DB.getConnection();

@@ -8,38 +8,49 @@ import java.util.*;
 import javax.swing.border.EmptyBorder;
 
 public class BackupRestorePanel extends JPanel implements Refreshable {
-    JTextArea log = new JTextArea();
     String[] tables = new String[]{"admin","petugas","mobil","pelanggan","denda","rental","pengembalian"};
 
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    JTextArea log = new JTextArea();
+    private JTextArea noteArea;
+
+    // GUI Builder fields
+    private JLabel lblTitle;
+    private JPanel mainPanel, topPanel, buttonPanel;
+    private JScrollPane scrollPane;
+    private JButton btnBackup, btnRestore;
+
+    // End of variables declaration//GEN-END:variables
     public BackupRestorePanel(){
-        setLayout(new BorderLayout(0,14));
-        setBackground(UI.BG);
-        setBorder(new EmptyBorder(24,24,24,24));
-        JLabel h = new JLabel("Backup & Restore Database");
-        h.setFont(UI.TITLE);
-        add(h, BorderLayout.NORTH);
+        initComponents();
+        btnBackup.addActionListener(e -> backup());
+        btnRestore.addActionListener(e -> restore());
 
-        JPanel main = UI.card();
-        add(main, BorderLayout.CENTER);
-        JPanel top = new JPanel(new BorderLayout(0,10));
-        top.setOpaque(false);
-        top.add(UI.note("Gunakan Backup untuk menyimpan struktur dan data database ke file .sql. Gunakan Restore hanya untuk file backup sistem ini karena proses restore akan menimpa database rental_mobil."), BorderLayout.CENTER);
-        JPanel buttons = UI.leftFlow();
-        JButton backup = UI.button("Backup Database");
-        JButton restore = UI.warningButton("Restore Database");
-        backup.addActionListener(e -> backup());
-        restore.addActionListener(e -> restore());
-        buttons.add(backup); buttons.add(restore);
-        top.add(buttons, BorderLayout.SOUTH);
-        main.add(top, BorderLayout.NORTH);
-
-        log.setFont(new Font("Consolas", Font.PLAIN, 12));
-        log.setEditable(false);
-        log.setRows(12);
-        log.setText("Log backup/restore akan tampil di sini.\n");
-        main.add(new JScrollPane(log), BorderLayout.CENTER);
     }
 
+    @SuppressWarnings("unchecked")
+
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        setPreferredSize(new Dimension(1000, 620));
+        setBackground(UI.BG);
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        lblTitle = new JLabel("Backup & Restore Database");
+        add(lblTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 18, 500, 28));
+        topPanel = new JPanel(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        add(topPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 960, 120));
+        noteArea = new JTextArea("Gunakan Backup untuk menyimpan struktur dan data database ke file .sql. Gunakan Restore hanya untuk file backup sistem ini karena proses restore akan menimpa database rental_mobil.");
+        noteArea.setEditable(false); noteArea.setLineWrap(true); noteArea.setWrapStyleWord(true); noteArea.setFocusable(false);
+        topPanel.add(noteArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 980, 55));
+        btnBackup = new JButton("Backup Database");
+        topPanel.add(btnBackup, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 150, 28));
+        btnRestore = new JButton("Restore Database");
+        topPanel.add(btnRestore, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 70, 150, 28));
+        log.setRows(12);
+        log.setText("Log backup/restore akan tampil di sini.\n");
+        scrollPane = new JScrollPane(log);
+        add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 960, 400));
+    }// </editor-fold>//GEN-END:initComponents
     void append(String s){ log.append(s + "\n"); log.setCaretPosition(log.getDocument().getLength()); }
 
     void backup(){

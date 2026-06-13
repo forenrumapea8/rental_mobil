@@ -7,29 +7,82 @@ import java.sql.*;
 import javax.swing.border.EmptyBorder;
 
 public class PetugasPanel extends JPanel implements Refreshable {
-    JTable table = new JTable();
     DefaultTableModel model;
-    JTextField nama = new JTextField(), user = new JTextField(), pass = new JTextField(), hp = new JTextField(), alamat = new JTextField(), cari = new JTextField();
-    JComboBox<String> status = new JComboBox<String>(new String[]{"Aktif","Nonaktif"});
     int id = 0;
 
-    public PetugasPanel(){
-        setLayout(new BorderLayout(0,14));
-        setBackground(UI.BG);
-        setBorder(new EmptyBorder(24,24,24,24));
-        JLabel h = new JLabel("Data Petugas");
-        h.setFont(UI.TITLE);
-        add(h, BorderLayout.NORTH);
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    JTable table = new JTable();
+    JTextField nama = new JTextField(), user = new JTextField(), pass = new JTextField(), hp = new JTextField(), alamat = new JTextField(), cari = new JTextField();
+    JComboBox<String> status = new JComboBox<String>(new String[]{"Aktif","Nonaktif"});
 
-        JPanel main = UI.card();
-        add(main, BorderLayout.CENTER);
+    // GUI Builder fields
+    private JLabel lblTitle;
+    private JPanel mainPanel, formWrapPanel, formPanel, buttonPanel;
+    private JScrollPane scrollPane;
+    private JButton btnSave, btnDelete, btnReset, btnCari, btnRefresh;
+
+    private javax.swing.JLabel lblNama, lblUsername, lblPassword, lblNoHP, lblAlamat, lblStatus, lblCari;
+    // End of variables declaration//GEN-END:variables
+    public PetugasPanel(){
+        initComponents();
+        btnSave.addActionListener(e -> save());
+        btnDelete.addActionListener(e -> delete());
+        btnReset.addActionListener(e -> clear());
+        btnCari.addActionListener(e -> load(cari.getText()));
+        btnRefresh.addActionListener(e -> { cari.setText(""); load(""); });
+
+        status.setModel(new DefaultComboBoxModel<String>(new String[]{"Aktif","Nonaktif"}));
+
+        lblTitle.setText("Data Petugas");
         model = new DefaultTableModel(new Object[]{"ID","Nama","Username","No HP","Alamat","Status"},0){ public boolean isCellEditable(int r,int c){ return false; } };
         table.setModel(model);
-        main.add(form(), BorderLayout.NORTH);
-        main.add(UI.table(table), BorderLayout.CENTER);
+        for(JComponent c : new JComponent[]{nama,user,pass,hp,alamat,status,cari,cari}) UI.input(c);
         table.getSelectionModel().addListSelectionListener(e -> pilih());
     }
 
+    @SuppressWarnings("unchecked")
+
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        setPreferredSize(new Dimension(1000, 620));
+        setBackground(UI.BG);
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        lblTitle = new JLabel("Data Petugas");
+        add(lblTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 18, 500, 28));
+        lblNama = new JLabel("Nama");
+        add(lblNama, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 64, 140, 22));
+        add(nama, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 60, 180, 26));
+        lblUsername = new JLabel("Username");
+        add(lblUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 64, 140, 22));
+        add(user, new org.netbeans.lib.awtextra.AbsoluteConstraints(508, 60, 180, 26));
+        lblPassword = new JLabel("Password");
+        add(lblPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 64, 100, 22));
+        add(pass, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 60, 170, 26));
+        lblNoHP = new JLabel("No HP");
+        add(lblNoHP, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 104, 140, 22));
+        add(hp, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 100, 180, 26));
+        lblAlamat = new JLabel("Alamat");
+        add(lblAlamat, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 104, 140, 22));
+        add(alamat, new org.netbeans.lib.awtextra.AbsoluteConstraints(508, 100, 180, 26));
+        lblStatus = new JLabel("Status");
+        add(lblStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 104, 100, 22));
+        add(status, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 100, 170, 26));
+        lblCari = new JLabel("Cari");
+        add(lblCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 144, 140, 22));
+        add(cari, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 140, 180, 26));
+        btnSave = new JButton("Simpan");
+        add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 192, 90, 28));
+        btnDelete = new JButton("Hapus");
+        add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(118, 192, 90, 28));
+        btnReset = new JButton("Reset");
+        add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(216, 192, 80, 28));
+        btnCari = new JButton("Cari");
+        add(btnCari, new org.netbeans.lib.awtextra.AbsoluteConstraints(304, 192, 70, 28));
+        btnRefresh = new JButton("Refresh");
+        add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(382, 192, 90, 28));
+        scrollPane = new JScrollPane(table);
+        add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 960, 360));
+    }// </editor-fold>//GEN-END:initComponents
     JPanel form(){
         JPanel wrap = new JPanel(new BorderLayout(0,10));
         wrap.setOpaque(false);
