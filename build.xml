@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="rental_mobil" default="run" basedir=".">
+    <property file="nbproject/project.properties"/>
+    <path id="cp">
+        <pathelement location="${build.classes.dir}"/>
+        <pathelement location="lib/mysql-connector-j-9.7.0.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+        <mkdir dir="struk"/>
+    </target>
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" destdir="${build.classes.dir}" source="1.8" target="1.8" includeantruntime="false" encoding="UTF-8">
+            <classpath refid="cp"/>
+        </javac>
+    </target>
+    <target name="jar" depends="compile">
+        <jar destfile="${dist.jar}" basedir="${build.classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+                <attribute name="Class-Path" value="../lib/mysql-connector-j-9.7.0.jar"/>
+            </manifest>
+        </jar>
+    </target>
+    <target name="run" depends="compile">
+        <java classname="${main.class}" fork="true">
+            <classpath refid="cp"/>
+        </java>
+    </target>
+    <target name="run-single" depends="compile">
+        <java classname="${run.class}" fork="true" failonerror="true">
+            <classpath refid="cp"/>
+        </java>
+    </target>
+    <target name="clean-build" depends="clean,compile"/>
+</project>

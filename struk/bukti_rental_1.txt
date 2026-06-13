@@ -1,0 +1,10 @@
+BUKTI RENTAL MOBIL
+===================
+ID Rental : 1
+Pelanggan : Budi Santoso
+Mobil     : Honda Brio - AG 5678 BB
+Tanggal   : 2026-06-12 s/d 2026-06-14
+Lama      : 2 hari
+Tarif     : Rp300.000 / hari
+Total     : Rp600.000
+Status    : Selesai
